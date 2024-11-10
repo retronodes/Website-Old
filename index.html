@@ -1,0 +1,538 @@
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Retronodes Hosting</title>
+    <link rel="icon" type="image/png" href="assets/images/retronodes.png">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="./assets/css/app.css" defer="" rel="stylesheet">
+    <link href="./assets/css/style.css" defer="" rel="stylesheet">
+    <script src="script.js" defer></script>
+    <script src="redirect.js"></script>
+</head>
+
+<body class="bg-zinc-950 antialiased">
+    <!-- Loading Screen -->
+    <div id="loading-screen">
+        <div class="loader"></div>
+    </div>
+
+    <!-- Navbar Section -->
+    <div id="content" class="hidden"></div>
+    <header class="absolute inset-x-0 top-0 z-10">
+        <div class="relative flex justify-center">
+            <div class="mx-4 w-full max-w-7xl">
+                <nav class="flex min-h-[80px] items-center justify-between px-4 py-3">
+                    <div class="flex items-center space-x-2">
+                        <img src="assets/images/retronodes.png" alt="Retronodes Hosting" class="small-logo ">
+                        <h1 class="text-transparent bg-gradient-to-br from-white to-zinc-500 bg-clip-text w-max text-2xl font-bold font-raleway ">
+                            RetroNodes</h1>
+                    </div>
+                    <div class="hidden sm:flex flex-1 items-center justify-end space-x-4 text-sm font-medium text-zinc-300 sm:space-x-6 ">
+                        <a href="https://portal.retronodes.cloud/login " class="group relative overflow-hidden rounded-full p-px text-sm/6 text-zinc-400 duration-300 hover:text-zinc-100 ">
+                            <div class="relative z-10 rounded-full bg-zinc-900 group-hover:bg-gradient-to-br group-hover:bg-clip-border ">
+                                <div class="rounded-full bg-zinc-950 px-3 py-2 group-hover:bg-zinc-950 ">Sign In</div>
+                            </div>
+                        </a>
+                        <a href="https://dash.retronodes.cloud " class="group relative overflow-hidden rounded-full p-px text-sm/6 text-zinc-400 duration-300 hover:text-zinc-100 ">
+                            <div class="relative z-10 rounded-full bg-zinc-900 group-hover:bg-gradient-to-br group-hover:bg-clip-border ">
+                                <div class="rounded-full bg-zinc-950 px-3 py-2 group-hover:bg-zinc-950 ">Dashboard</div>
+                            </div>
+                        </a>
+                        <a href="https://status.retronodes.cloud " class="group relative overflow-hidden rounded-full p-px text-sm/6 text-zinc-400 duration-300 hover:text-zinc-100 ">
+                            <div class="relative z-10 rounded-full bg-zinc-900 group-hover:bg-gradient-to-br group-hover:bg-clip-border ">
+                                <div class="rounded-full bg-zinc-950 px-3 py-2 group-hover:bg-zinc-950 ">Service Status
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+
+                    <div class="sm:hidden relative ">
+                        <button id="dropdownBtn " class="flex items-center text-zinc-300 focus:outline-none relative ">
+                            <span>Quick Links</span>
+                            <svg id="dropdownArrow " class="w-6 h-6 ml-2 transition-transform duration-300 "
+                                fill="none " stroke="currentColor " viewBox="0 0 24 24 "
+                                xmlns="http://www.w3.org/2000/svg ">
+                                <path stroke-linecap="round " stroke-linejoin="round " stroke-width="2 "
+                                    d="M19 9l-7 7-7-7 "></path>
+                            </svg>
+                        </button>
+                        <div id="dropdownMenu " class="hidden absolute right-0 mt-2 w-48 bg-zinc-900 text-zinc-300 rounded-lg shadow-lg opacity-0 transform transition-opacity duration-300 ease-in-out ">
+                            <a href="https://portal.retronodes.cloud/login " class="flex items-center px-4 py-2 hover:bg-zinc-800 ">
+                                <img src="assets/images/user-white.png " class="w-5 h-5 mr-2 " alt="Sign In ">
+                                <span>Sign In</span>
+                            </a>
+                            <a href="https://dash.retronodes.cloud " class="flex items-center px-4 py-2 hover:bg-zinc-800 ">
+                                <img src="assets/images/dashboard-white.png " class="w-5 h-5 mr-2 " alt="Dashboard ">
+                                <span>Dashboard</span>
+                            </a>
+                            <a href="https://status.retronodes.cloud " class="flex items-center px-4 py-2 hover:bg-zinc-800 ">
+                                <img src="assets/images/uptime-white.png " class="w-5 h-5 mr-2 " alt="Service Status ">
+                                <span>Service Status</span>
+                            </a>
+                        </div>
+                    </div>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <style>
+        #dropdownMenu {
+            position: absolute;
+            top: calc(100% + 10px);
+            right: 0;
+            z-index: 10;
+            display: none;
+            background: linear-gradient(to bottom top, #272727, #000000);
+            box-shadow: 0 4px 6px rgba(255, 255, 255, 0.1);
+            border-radius: 0.5rem;
+            opacity: 0;
+            transform: translateY(-10px);
+            transition: opacity 0.3s ease, transform 0.3s ease;
+        }
+        
+        #dropdownMenu.open {
+            display: block;
+            opacity: 1;
+            transform: translateY(0);
+        }
+        
+        @keyframes dropdownPopIn {
+            0% {
+                transform: translateY(-10px);
+                opacity: 0;
+            }
+            100% {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+        
+        #dropdownArrow {
+            transition: transform 0.6s ease;
+        }
+        
+        .rotate-180 {
+            transform: rotate(180deg);
+        }
+    </style>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const dropdownBtn = document.getElementById('dropdownBtn');
+            const dropdownMenu = document.getElementById('dropdownMenu');
+            const dropdownArrow = document.getElementById('dropdownArrow');
+
+            dropdownBtn.addEventListener('click', function() {
+                dropdownMenu.classList.toggle('hidden');
+                dropdownMenu.classList.toggle('open');
+                dropdownArrow.classList.toggle('rotate-180');
+
+                if (dropdownMenu.classList.contains('open')) {
+                    dropdownMenu.style.animation = 'dropdownPopIn 0.3s forwards';
+                } else {
+                    dropdownMenu.style.animation = 'none';
+                }
+            });
+
+            document.addEventListener('click', function(event) {
+                if (!dropdownBtn.contains(event.target) && !dropdownMenu.contains(event.target)) {
+                    dropdownMenu.classList.add('hidden');
+                    dropdownMenu.classList.remove('open');
+                    dropdownArrow.classList.remove('rotate-180');
+                    dropdownMenu.style.animation = 'none';
+                }
+            });
+        });
+    </script>
+
+    <!-- Main Section -->
+    <main>
+        <section class="relative isolate transform-gpu pt-14">
+            <svg class="absolute inset-0 -z-10 h-full w-full stroke-white/15 [mask-image:radial-gradient(85%_60%_at_top_center,white,transparent)]">
+                <defs>
+                    <pattern id="hero" width="80" height="80" x="50%" y="-1" patternUnits="userSpaceOnUse">
+                        <path d="M.5 200V.5H200" fill="none"></path>
+                    </pattern>
+                </defs>
+                <rect width="100%" height="100%" stroke-width="0" fill="url(#hero)"></rect>
+            </svg>
+            <div class="py-24 sm:py-36 md:py-40 lg:pb-40">
+                <div class="mx-auto max-w-7xl px-6 lg:px-8">
+                    <div class="relative mx-auto max-w-3xl text-center">
+                        <h1 class="bg-gradient-to-br from-white to-zinc-500/50 bg-clip-text text-4xl/[1.07] font-bold tracking-tight text-transparent md:text-7xl/[1.07]">
+                            Hosting Made Easy <span class="font-rajdhani"></span>with RetroNodes ;)<span class="font-raleway text-6xl/[1.07] md:text-8xl/[1.07]"> <span class="font-karla">
+                                </span></span>
+                        </h1>
+                        <p class="mt-6 text-md font-medium text-zinc-400 md:text-xl">
+                            Host your Minecraft server today, whether it's Java, Bedrock, Crossplay, or even a Proxy server! With one-click installation, get started now and choose from tons of plugins and modpacks. Plus, rest assured with our 2-day refund policy!
+                        </p>
+
+                        <div class="relative pt-10">
+                            <div class="relative center-image" style="transform: none;">
+                                <div class="rounded-md bg-zinc-950 ring-3 ring-white/20 lg:rounded-4xl">
+                                    <img id="myImage" src="assets/images/panel.png" alt="showcase" width="700" height="800">
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Panel Pop-Up -->
+                        <div id="myModal" class="popup">
+                            <div class="popup-content">
+                                <img src="assets/images/panel.png" alt="showcase">
+                                <button class="cancel-button">Cancel View</button>
+                            </div>
+                        </div>
+
+                        <script>
+                            // Get the modal
+                            var modal = document.getElementById("myModal");
+
+                            // Get the image and insert it inside the modal
+                            var img = document.getElementById("myImage");
+                            var modalImg = modal.querySelector(".popup-content img");
+                            img.onclick = function() {
+                                modal.style.display = "flex";
+                                setTimeout(() => {
+                                    modal.classList.add('visible');
+                                }, 10);
+                                modalImg.src = this.src;
+                            }
+
+                            // Get the button element that closes the modal
+                            var button = modal.querySelector(".cancel-button");
+
+                            // When the user clicks on the button, close the modal
+                            button.onclick = function() {
+                                modal.classList.remove('visible');
+                                setTimeout(() => {
+                                    modal.style.display = "none";
+                                }, 300);
+                            }
+
+                            // When the user clicks anywhere outside of the modal, close it
+                            window.onclick = function(event) {
+                                if (event.target == modal) {
+                                    modal.classList.remove('visible');
+                                    setTimeout(() => {
+                                        modal.style.display = "none";
+                                    }, 300);
+                                }
+                            }
+                        </script>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Features Section -->
+        <section class="mx-auto max-w-7xl p-6 py-16 md:py-1 lg:px-8 ">
+            <div class="grid max-w-xl lg:max-w-2xl items-start justify-between gap-5 ">
+                <div class="text-4xl/[1.07] font-bold tracking-tight md:text-5xl/[1.07] ">
+                    <span class="bg-gradient-to-br from-white to-zinc-500 bg-clip-text text-transparent ">
+                        Dashboard Overview
+                    </span>
+                </div>
+                <div class="text-lg text-zinc-400/80 ">
+                    Unlock Various Management Capabilities with Our Dashboard <br>From SFTP Access, Activity Logs, Startup Manager & many more as listed below:
+                </div>
+            </div>
+            <div class="mt-16 grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 lg:gap-6 xl:gap-8 ">
+                <!-- File Manager -->
+                <div class="flex h-[400px] flex-col overflow-hidden rounded-2xl bg-zinc-900/50 border border-zinc-800/80 ">
+                    <div class="relative mb-4 flex h-full w-full items-center justify-center overflow-hidden [mask:linear-gradient(black_70%,transparent)] ">
+                        <div class="relative -z-10 h-full w-full ">
+                            <div class="absolute -left-0 right-0 -top-6 h-full w-full overflow-hidden ">
+                                <img src="assets/images/file-manager.png " class="h-full w-auto " alt="pic ">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="mt-auto w-full space-y-4 px-4 pb-6 ">
+                        <h3 class="text-lg/none font-medium text-zinc-200 ">File Manager</h3>
+                        <p class="max-w-sm text-sm text-zinc-400/80 ">Manage server files directly from our GamePanel, including editing configuration files, handling game assets, and uploading or downloading files.
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Plugins Manager -->
+                <div class="flex h-[400px] flex-col overflow-hidden rounded-2xl bg-zinc-900/50 border border-zinc-800/80 ">
+                    <div class="relative mb-4 flex h-full w-full items-center justify-center overflow-hidden [mask:linear-gradient(black_70%,transparent)] ">
+                        <div class="relative -z-10 h-full w-full ">
+                            <div class="absolute -left-0 right-0 -top-6 h-full w-full overflow-hidden ">
+                                <img src="assets/images/plugins-manager.png " class="h-full w-auto " alt="pic ">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="mt-auto w-full space-y-4 px-4 pb-6 ">
+                        <h3 class="text-lg/none font-medium text-zinc-200 ">Plugins Manager</h3>
+                        <p class="max-w-sm text-sm text-zinc-400/80 ">Easily download plugins from all market places without manually visiting, downloading, uploading and restarting to apply your plugins.</p>
+                    </div>
+                </div>
+
+                <!-- Schedule Manager -->
+                <div class="flex h-[400px] flex-col overflow-hidden rounded-2xl bg-zinc-900/50 border border-zinc-800/80 ">
+                    <div class="relative mb-4 flex h-full w-full items-center justify-center overflow-hidden [mask:linear-gradient(black_70%,transparent)] ">
+                        <div class="relative -z-10 h-full w-full ">
+                            <div class="absolute -left-0 right-0 -top-6 h-full w-full overflow-hidden ">
+                                <img src="assets/images/schedule-manager.png " class="h-full w-auto " alt="pic ">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="mt-auto w-full space-y-4 px-4 pb-6 ">
+                        <h3 class="text-lg/none font-medium text-zinc-200 ">Schedule Manager</h3>
+                        <p class="max-w-sm text-sm text-zinc-400/80 ">Easily automate tasks from our GamePanel for servers, including backups, updates, and custom scripts, ensuring smooth routine maintenance.
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Backup Manager -->
+                <div class="flex h-[400px] flex-col overflow-hidden rounded-2xl bg-zinc-900/50 border border-zinc-800/80 ">
+                    <div class="relative mb-4 flex h-full w-full items-center justify-center overflow-hidden [mask:linear-gradient(black_70%,transparent)] ">
+                        <div class="relative -z-10 h-full w-full ">
+                            <div class="absolute -left-0 right-0 -top-6 h-full w-full overflow-hidden ">
+                                <img src="assets/images/backup-manager.png " class="h-full w-auto " alt="pic ">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="mt-auto w-full space-y-4 px-4 pb-6 ">
+                        <h3 class="text-lg/none font-medium text-zinc-200 ">Backup Manager</h3>
+                        <p class="max-w-sm text-sm text-zinc-400/80 ">Safeguard server data backups with our GamePanel, ensuring utmost data security and effortless restoration with a single click.</p>
+                    </div>
+                </div>
+
+                <!-- Network Manager -->
+                <div class="flex h-[400px] flex-col overflow-hidden rounded-2xl bg-zinc-900/50 border border-zinc-800/80 ">
+                    <div class="relative mb-4 flex h-full w-full items-center justify-center overflow-hidden [mask:linear-gradient(black_70%,transparent)] ">
+                        <div class="relative -z-10 h-full w-full ">
+                            <div class="absolute -left-0 right-0 -top-6 h-full w-full overflow-hidden ">
+                                <img src="assets/images/network-manager.png " class="h-full w-auto " alt="pic ">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="mt-auto w-full space-y-4 px-4 pb-6 ">
+                        <h3 class="text-lg/none font-medium text-zinc-200 ">Network Manager</h3>
+                        <p class="max-w-sm text-sm text-zinc-400/80 ">Our GamePanel offers intuitive controls, empowering users to effortlessly manage ports, IP addresses, and firewall settings with ease and precision.</p>
+                    </div>
+                </div>
+
+                <!-- Subusers Manager -->
+                <div class="flex h-[400px] flex-col overflow-hidden rounded-2xl bg-zinc-900/50 border border-zinc-800/80 ">
+                    <div class="relative mb-4 flex h-full w-full items-center justify-center overflow-hidden [mask:linear-gradient(black_70%,transparent)] ">
+                        <div class="relative -z-10 h-full w-full ">
+                            <div class="absolute -left-0 right-0 -top-6 h-full w-full overflow-hidden ">
+                                <img src="assets/images/subusers-manager.png " class="h-full w-auto " alt="pic ">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="mt-auto w-full space-y-4 px-4 pb-6 ">
+                        <h3 class="text-lg/none font-medium text-zinc-200 ">Subusers Manager</h3>
+                        <p class="max-w-sm text-sm text-zinc-400/80 ">Our GamePanel's subusers manager simplifies access management, enabling administrators to assign roles and permissions with flexibility and control.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+
+        <section class="mx-auto max-w-7xl p-6 pt-16 md:pt-24 lg:px-8 text-center ">
+            <div class="grid max-w-xl lg:max-w-2xl items-start justify-center gap-5 mx-auto ">
+                <div class="text-4xl/[1.07] font-bold tracking-tight md:text-5xl/[1.07] ">
+                    <span class="bg-gradient-to-br from-white to-zinc-500 bg-clip-text text-transparent ">
+                        Ready to order a Plan?
+                    </span>
+                </div>
+            </div>
+            <div class="mt-6 text-lg text-zinc-400/80 ">
+                We are a Proud Indian Hosting Service Provider!<br>
+                <a href="https://discord.gg/7nxh3WsY46 ">For Custom Plans join our Discord server.</a>
+            </div>
+
+            <div class="relative mt-9 flex justify-center text-zinc-400 "> </div>
+
+            <!-- Plans Section Start Unfinished -->
+            <div class="pricing-container ">
+                <div class="pricing-card ">
+                    <h2>Minecraft Java</h2>
+                    <div class="price ">₹265/month</div>
+                    <img src="assets/images/minecraft-java-icon.png " alt="Slime Plan ">
+                    <ul>
+                        <li>PaperMC, Forge, Pufferfish, Purpur & Vanilla Minecraft.</li>
+                    </ul>
+                    <a href="https://portal.retronodes.cloud/minecraft-java "><button>Get started</button></a>
+                </div>
+                <div class="pricing-card ">
+                    <h2>Minecraft Bedrock</h2>
+                    <div class="price ">₹135/month</div>
+                    <img src="assets/images/minecraft-bedrock-icon.png " alt="Zombie Plan ">
+                    <ul>
+                        <li>PocketmineMP, PowerNukkitX, Nukkit & Vanilla Minecraft.</li>
+                    </ul>
+                    <a href="https://portal.retronodes.cloud/minecraft-bedrock "><button>Get started</button></a>
+                </div>
+                <div class="pricing-card ">
+                    <h2>Geyser-Floodgate</h2>
+                    <div class="price ">₹390/month</div>
+                    <img src="assets/images/minecraft-crossplay-icon.png " alt="Iron Plan ">
+                    <ul>
+                        <li>Paper-Geyser-Floodgate & Purpur-Geyser-Floodgate.</li>
+                    </ul>
+                    <a href="https://portal.retronodes.cloud/minecraft-crossplay "><button>Get started</button></a>
+                </div>
+                <div class="pricing-card ">
+                    <h2>Proxy Server</h2>
+                    <div class="price ">₹65/month</div>
+                    <img src="assets/images/minecraft-proxy.webp " alt="Gold Plan ">
+                    <ul>
+                        <li>BungeeCord, Velocity/Geyser-Floodgate & WaterdogPE.</li>
+                    </ul>
+                    <a href="https://portal.retronodes.cloud/minecraft-proxy "><button>Get started</button></a>
+                </div>
+            </div>
+            <!-- Plans Section End Unfinished -->
+
+            <!-- Testimonials Section Start -->
+            <section class="mx-auto max-w-7xl p-6 pt-16 md:pt-24 lg:px-8 ">
+                <div class="grid max-w-xl lg:max-w-2xl items-start justify-between gap-5 ">
+                    <div class="text-4xl/[1.07] font-bold tracking-tight md:text-5xl/[1.07] ">
+                        <span class="bg-gradient-to-br from-white to-zinc-500 bg-clip-text text-transparent ">
+                            What do our clients say?
+                        </span>
+                    </div>
+                </div>
+                <div class="relative mt-9 grid grid-cols-1 gap-4 md:grid-cols-4 h-max text-zinc-400 ">
+                    <div class="flex space-y-4 flex-col w-full ">
+                        <div class="rounded-2xl w-full border border-zinc-100/10 p-4 bg-zinc-900/50 ">
+                            <div class="flex w-full items-center space-x-3 ">
+                                <img src="assets/images/testimony-1.png " alt="User1 " class="w-10 h-10 rounded-full ">
+                                <div class="flex flex-col text-left justify-start ">
+                                    <h1 class="text-md font-bold text-zinc-200 ">Inv1s1bl3</h1>
+                                    <span class="text-xs text-zinc-400 ">@inv1s1bl3</span>
+                                </div>
+                            </div>
+                            <p class="pt-4 ">Our servers run under 50ms ping without lags or crashes, alongside top-notch support. Truly 5 stars!</p>
+                            <p class="pt-4 ">⭐ ⭐ ⭐ ⭐ ⭐</p>
+                        </div>
+                    </div>
+                    <div class="flex flex-col space-y-4 w-full ">
+                        <div class="rounded-2xl w-full border border-zinc-100/10 p-4 bg-zinc-900/50 ">
+                            <div class="flex w-full items-center space-x-3 ">
+                                <img src="assets/images/testimony-2.jpg " alt="user2 " class="w-10 h-10 rounded-full ">
+                                <div class="flex flex-col text-left justify-start ">
+                                    <h1 class="text-md font-bold text-zinc-200 ">ARNAB</h1>
+                                    <span class="text-xs text-zinc-400 ">@arnab077</span>
+                                </div>
+                            </div>
+                            <p class="pt-4 ">Switching to RetroNodes was the best decision we made for our community. Affordable and Excellent support!</p>
+                            <p class="pt-4 ">⭐ ⭐ ⭐ ⭐ ⭐</p>
+                        </div>
+                    </div>
+                    <div class="flex flex-col space-y-4 w-full ">
+                        <div class="rounded-2xl w-full border border-zinc-100/10 p-4 bg-zinc-900/50 ">
+                            <div class="flex w-full items-center space-x-3 ">
+                                <img src="assets/images/testimony-3.jpg " alt="user3 " class="w-10 h-10 rounded-full ">
+                                <div class="flex flex-col text-left justify-start ">
+                                    <h1 class="text-md font-bold text-zinc-200 ">Unfav XAlone</h1>
+                                    <span class="text-xs text-zinc-400 ">@xalone_craft</span>
+                                </div>
+                            </div>
+                            <p class="pt-4 ">With fast restarts, and their auto plugin downloader, developing my server has become so much easier.</p>
+                            <p class="pt-4 ">⭐ ⭐ ⭐ ⭐ ⭐</p>
+                        </div>
+                    </div>
+                    <div class="flex flex-col space-y-4 w-full ">
+                        <div class="rounded-2xl w-full border border-zinc-100/10 p-4 bg-zinc-900/50 ">
+                            <div class="flex w-full items-center space-x-3 ">
+                                <img src="assets/images/testimony-4.png " alt="user4 " class="w-10 h-10 rounded-full ">
+                                <div class="flex flex-col text-left justify-start ">
+                                    <h1 class="text-md font-bold text-zinc-200 ">SohamDaTechy</h1>
+                                    <span class="text-xs text-zinc-400 ">@sohamdatechy</span>
+                                </div>
+                            </div>
+                            <p class="pt-4 ">Considering the price, it's the most affordable hosting services in India for me. The performance is great too.</p>
+                            <p class="pt-4 ">⭐ ⭐ ⭐ ⭐</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="relative mt-9 grid grid-cols-1 gap-4 md:grid-cols-4 h-max text-zinc-400 ">
+                    <div class="flex space-y-4 flex-col w-full ">
+                        <div class="rounded-2xl w-full border border-zinc-100/10 p-4 bg-zinc-900/50 ">
+                            <div class="flex w-full items-center space-x-3 ">
+                                <img src="assets/images/testimony-5.jpg " alt="User5 " class="w-10 h-10 rounded-full ">
+                                <div class="flex flex-col text-left justify-start ">
+                                    <h1 class="text-md font-bold text-zinc-200 ">Benzene</h1>
+                                    <span class="text-xs text-zinc-400 ">@.benzene_.</span>
+                                </div>
+                            </div>
+                            <p class="pt-4 ">Smooth Server, No crashes, Easy UI, Truly one of the best and underrated Hostings. For me it's a Solid 5 stars.</p>
+                            <p class="pt-4 ">⭐ ⭐ ⭐ ⭐ ⭐</p>
+                        </div>
+                    </div>
+                    <div class="flex flex-col space-y-4 w-full ">
+                        <div class="rounded-2xl w-full border border-zinc-100/10 p-4 bg-zinc-900/50 ">
+                            <div class="flex w-full items-center space-x-3 ">
+                                <img src="assets/images/testimony-9.jpg" alt="user6 " class="w-10 h-10 rounded-full ">
+                                <div class="flex flex-col text-left justify-start ">
+                                    <h1 class="text-md font-bold text-zinc-200 ">Tobi</h1>
+                                    <span class="text-xs text-zinc-400 ">@bokuwa._.tobi</span>
+                                </div>
+                            </div>
+                            <p class="pt-4 ">Runs without issue, the owner was even kind enough to wait 4 days past date of payment. All at good price too, 5 stars!</p>
+                            <p class="pt-4 ">⭐ ⭐ ⭐ ⭐ ⭐</p>
+                        </div>
+                    </div>
+                    <div class="flex flex-col space-y-4 w-full ">
+                        <div class="rounded-2xl w-full border border-zinc-100/10 p-4 bg-zinc-900/50 ">
+                            <div class="flex w-full items-center space-x-3 ">
+                                <img src="assets/images/testimony-7.png " alt="user7 " class="w-10 h-10 rounded-full ">
+                                <div class="flex flex-col text-left justify-start ">
+                                    <h1 class="text-md font-bold text-zinc-200 ">Abhishek</h1>
+                                    <span class="text-xs text-zinc-400 ">@abhishekpurohit</span>
+                                </div>
+                            </div>
+                            <p class="pt-4 ">...</p>
+                            <p class="pt-4 ">⭐ ⭐ ⭐ ⭐ ⭐</p>
+                        </div>
+                    </div>
+                    <div class="flex flex-col space-y-4 w-full ">
+                        <div class="rounded-2xl w-full border border-zinc-100/10 p-4 bg-zinc-900/50 ">
+                            <div class="flex w-full items-center space-x-3 ">
+                                <img src="assets/images/testimony-8.png " alt="user8 " class="w-10 h-10 rounded-full ">
+                                <div class="flex flex-col text-left justify-start ">
+                                    <h1 class="text-md font-bold text-zinc-200 ">Donald J Trump</h1>
+                                    <span class="text-xs text-zinc-400 ">@harry_leads</span>
+                                </div>
+                            </div>
+                            <p class="pt-4 ">...</p>
+                            <p class="pt-4 ">⭐ ⭐ ⭐ ⭐</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Testimonials Section End -->
+    </main>
+
+    <!-- Footer -->
+    <footer class="isolate mx-auto max-w-7xl p-6 pb-4 lg:px-8">
+        <div class="border-t border-white/10 pt-4 md:flex md:items-center md:justify-between">
+            <div class="flex justify-center text-xs text-zinc-400 space-x-6 md:order-2">
+                <a class="duration-200 hover:text-zinc-300 " href="legal/refund-policy.html">Refund Policy</a>
+                <a class="duration-200 hover:text-zinc-300 " href="legal/cancellation-policy.html">Cancellation
+                    Policy</a>
+                <a class="duration-200 hover:text-zinc-300 " href="legal/privacy-policy.html">Privacy Policy</a>
+                <a class="duration-200 hover:text-zinc-300 " href="legal/terms-of-service.html">Terms of Service</a>
+            </div>
+            <div class="mt-8 flex items-center gap-4 text-xs font-medium leading-5 text-zinc-400 max-md:flex-col md:order-1 md:mt-0 ">
+                <div class="order-2 md:order-1 ">
+                    <p>© 2024 Retronodes Hosting Pvt. Ltd. All Rights Reserved.</a>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </footer>
+    </div>
+</body>
+
+</html>

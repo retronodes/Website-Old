@@ -1,0 +1,220 @@
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Terms of Service - Retronodes Hosting</title>
+    <link rel="icon" type="image/png" href="..//assets/images/retronodes.png">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="../assets/css/app.css" defer="" rel="stylesheet">
+    <link href="../assets/css/style.css" defer="" rel="stylesheet">
+    <script src="../script.js" defer></script>
+    <script src="../redirect.js"></script>
+</head>
+
+<body class="bg-zinc-950 antialiased">
+    <!-- Loading Screen -->
+    <div id="loading-screen">
+        <div class="loader"></div>
+    </div>
+
+    <!-- Navbar Section -->
+    <div id="content" class="hidden"></div>
+    <header class="absolute inset-x-0 top-0 z-10">
+        <div class="relative flex justify-center">
+            <div class="mx-4 w-full max-w-7xl">
+                <nav class="flex min-h-[80px] items-center justify-between px-4 py-3">
+                    <div class="flex items-center space-x-2">
+                        <img src="../assets/images/retronodes.png" alt="Retronodes Hosting" class="small-logo ">
+                        <h1 class="text-transparent bg-gradient-to-br from-white to-zinc-500 bg-clip-text w-max text-2xl font-bold font-raleway ">RetroNodes</h1>
+                    </div>
+                    <div class="hidden sm:flex flex-1 items-center justify-end space-x-4 text-sm font-medium text-zinc-300 sm:space-x-6 ">
+                        <a href="https://portal.retronodes.cloud/login " class="group relative overflow-hidden rounded-full p-px text-sm/6 text-zinc-400 duration-300 hover:text-zinc-100 ">
+                            <div class="relative z-10 rounded-full bg-zinc-900 group-hover:bg-gradient-to-br group-hover:bg-clip-border ">
+                                <div class="rounded-full bg-zinc-950 px-3 py-2 group-hover:bg-zinc-950 ">Sign In</div>
+                            </div>
+                        </a>
+                        <a href="https://dash.retronodes.cloud " class="group relative overflow-hidden rounded-full p-px text-sm/6 text-zinc-400 duration-300 hover:text-zinc-100 ">
+                            <div class="relative z-10 rounded-full bg-zinc-900 group-hover:bg-gradient-to-br group-hover:bg-clip-border ">
+                                <div class="rounded-full bg-zinc-950 px-3 py-2 group-hover:bg-zinc-950 ">Dashboard</div>
+                            </div>
+                        </a>
+                        <a href="https://status.retronodes.cloud " class="group relative overflow-hidden rounded-full p-px text-sm/6 text-zinc-400 duration-300 hover:text-zinc-100 ">
+                            <div class="relative z-10 rounded-full bg-zinc-900 group-hover:bg-gradient-to-br group-hover:bg-clip-border ">
+                                <div class="rounded-full bg-zinc-950 px-3 py-2 group-hover:bg-zinc-950 ">Service Status</div>
+                            </div>
+                        </a>
+                    </div>
+
+                    <div class="sm:hidden relative ">
+                        <button id="dropdownBtn " class="flex items-center text-zinc-300 focus:outline-none relative ">
+                        <span>Quick Links</span>
+                        <svg id="dropdownArrow " class="w-6 h-6 ml-2 transition-transform duration-300 " fill="none " stroke="currentColor " viewBox="0 0 24 24 " xmlns="http://www.w3.org/2000/svg ">
+                            <path stroke-linecap="round " stroke-linejoin="round " stroke-width="2 " d="M19 9l-7 7-7-7 "></path>
+                        </svg>
+                    </button>
+                        <div id="dropdownMenu " class="hidden absolute right-0 mt-2 w-48 bg-zinc-900 text-zinc-300 rounded-lg shadow-lg opacity-0 transform transition-opacity duration-300 ease-in-out ">
+                            <a href="https://portal.retronodes.cloud/login " class="flex items-center px-4 py-2 hover:bg-zinc-800 ">
+                                <img src="../assets/images/user-white.png " class="w-5 h-5 mr-2 " alt="Sign In ">
+                                <span>Sign In</span>
+                            </a>
+                            <a href="https://dash.retronodes.cloud " class="flex items-center px-4 py-2 hover:bg-zinc-800 ">
+                                <img src="../assets/images/dashboard-white.png " class="w-5 h-5 mr-2 " alt="Dashboard ">
+                                <span>Dashboard</span>
+                            </a>
+                            <a href="https://status.retronodes.cloud " class="flex items-center px-4 py-2 hover:bg-zinc-800 ">
+                                <img src="../assets/images/uptime-white.png " class="w-5 h-5 mr-2 " alt="Service Status ">
+                                <span>Service Status</span>
+                            </a>
+                        </div>
+                    </div>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <style>
+        #dropdownMenu {
+            position: absolute;
+            top: calc(100% + 10px);
+            right: 0;
+            z-index: 10;
+            display: none;
+            background: linear-gradient(to bottom top, #272727, #000000);
+            box-shadow: 0 4px 6px rgba(255, 255, 255, 0.1);
+            border-radius: 0.5rem;
+            opacity: 0;
+            transform: translateY(-10px);
+            transition: opacity 0.3s ease, transform 0.3s ease;
+        }
+        
+        #dropdownMenu.open {
+            display: block;
+            opacity: 1;
+            transform: translateY(0);
+        }
+        
+        @keyframes dropdownPopIn {
+            0% {
+                transform: translateY(-10px);
+                opacity: 0;
+            }
+            100% {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+        
+        #dropdownArrow {
+            transition: transform 0.6s ease;
+        }
+        
+        .rotate-180 {
+            transform: rotate(180deg);
+        }
+    </style>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const dropdownBtn = document.getElementById('dropdownBtn');
+            const dropdownMenu = document.getElementById('dropdownMenu');
+            const dropdownArrow = document.getElementById('dropdownArrow');
+
+            dropdownBtn.addEventListener('click', function() {
+                dropdownMenu.classList.toggle('hidden');
+                dropdownMenu.classList.toggle('open');
+                dropdownArrow.classList.toggle('rotate-180');
+
+                if (dropdownMenu.classList.contains('open')) {
+                    dropdownMenu.style.animation = 'dropdownPopIn 0.3s forwards';
+                } else {
+                    dropdownMenu.style.animation = 'none';
+                }
+            });
+
+            document.addEventListener('click', function(event) {
+                if (!dropdownBtn.contains(event.target) && !dropdownMenu.contains(event.target)) {
+                    dropdownMenu.classList.add('hidden');
+                    dropdownMenu.classList.remove('open');
+                    dropdownArrow.classList.remove('rotate-180');
+                    dropdownMenu.style.animation = 'none';
+                }
+            });
+        });
+    </script>
+
+    <!-- Terms of Service Content -->
+    <main class="pt-24 ">
+        <section class="relative isolate transform-gpu py-14 ">
+            <div class="mx-auto max-w-7xl px-6 lg:px-8 ">
+                <div class="mx-auto max-w-3xl text-center ">
+                    <h1 class="text-4xl font-bold tracking-tight text-white md:text-5xl ">Terms of Service</h1>
+                    <p class="mt-6 text-md font-medium text-zinc-400 md:text-xl ">
+                        Please carefully review the following terms that govern your use of our services:
+                    </p>
+                </div>
+                <div class="mt-12 mx-auto max-w-3xl text-zinc-300 text-lg space-y-6 ">
+                    <h2 class="text-2xl font-semibold text-white ">1. Acceptance of Terms</h2>
+                    <p>By using Retronodes Hosting services (by ordering any service), you agree to accept and abide by these Terms of Service. This includes compliance with:</p>
+                    <ul class="list-disc ml-5 ">
+                        <li>The Minecraft End User License Agreement (EULA) as outlined by Mojang AB for Minecraft server hosting.</li>
+                        <li>Our Terms of Service for any files uploaded to our nodes.</li>
+                    </ul>
+
+                    <h2 class="text-2xl font-semibold text-white ">2. Files Uploaded on Our Nodes</h2>
+                    <p>Users are solely responsible for any files uploaded to Retronodes Hosting servers. It is prohibited to upload or store illegal, malicious, or copyrighted content that you do not have the rights to distribute. Retronodes Hosting reserves
+                        the right to remove any content that violates these terms without notice.</p>
+
+                    <h2 class="text-2xl font-semibold text-white ">3. Prohibited Activities</h2>
+                    <p>Users agree not to engage in activities that disrupt or interfere with the operation of Retronodes Hosting services or the experience of other users. Prohibited activities include but are not limited to:</p>
+                    <ul class="list-disc ml-5 ">
+                        <li>Exploiting server vulnerabilities (Report it).</li>
+                        <li>Distributing malware or engaging in any form of hacking or unauthorized access.</li>
+                        <li>Engaging in activities that violate local, national, or international laws.</li>
+                    </ul>
+
+                    <h2 class="text-2xl font-semibold text-white ">4. Immediate Ban for Mining or Similar Activities</h2>
+                    <p>Retronodes Hosting has a zero-tolerance policy for any form of cryptocurrency mining or similar resource-intensive activities on our servers. Users found engaging in such activities will be permanently banned from our platform without
+                        suspension, removal, or warning. Such users will be blacklisted and prohibited from using our services in the future.</p>
+
+                    <h2 class="text-2xl font-semibold text-white ">5. Payment and Refunds</h2>
+                    <p>Payments for Retronodes Hosting services are non-refundable after 48 hours from the time of purchase as specified in our Refund Policy.</p>
+
+                    <h2 class="text-2xl font-semibold text-white ">6. Service Modifications</h2>
+                    <p>In the event of discontinuation, Retronodes Hosting will:</p>
+                    <ul class="list-disc ml-5 ">
+                        <li>Notify affected users via personal email, announcements on our website, and our Discord server to backup all data before servers are deleted.</li>
+                        <li>Provide refunds based on the unused portion of prepaid services. For example, if a server was active for 20 days out of a prepaid 30-day period, a refund for the remaining 10 days will be issued within 24-48 hours.</li>
+                    </ul>
+
+                    <h2 class="text-2xl font-semibold text-white ">7. Privacy Policy</h2>
+                    <p>Our Privacy Policy governs the collection, use, and protection of your personal information. By using our services, you consent to the terms outlined in our Privacy Policy.</p>
+
+                    <h2 class="text-2xl font-semibold text-white ">8. Disclaimer of Warranties</h2>
+                    <p>Retronodes Hosting services are provided on an "as-is " and "as-available " basis. We make no warranties or representations regarding the reliability, accuracy, or availability of our services.</p>
+
+                    <h2 class="text-2xl font-semibold text-white ">9. Limitation of Liability</h2>
+                    <p>In no event shall Retronodes Hosting be liable for any direct, indirect, incidental, special, or consequential damages arising out of or in any way connected with the use of our services.</p>
+
+                    <h2 class="text-2xl font-semibold text-white ">10. Governing Law</h2>
+                    <p>These Terms of Service shall be governed by and construed in accordance with the laws of India. Retronodes Hosting is an Indian Game Server Hosting service, and as such, we will follow Indian jurisdiction, rules, and regulations.</p>
+
+                    <h2 class="text-2xl font-semibold text-white ">11. Contact Us</h2>
+                    <p>If you have any questions or concerns regarding these Terms of Service, please contact us through our support channels. We reserve the right to update or modify these terms at any time, and it is your responsibility to review them
+                        periodically for changes. Continued use of our services after any such changes shall constitute your consent to such changes.</p>
+
+                    <p>Thank you for choosing Retronodes Hosting. We look forward to providing you with excellent game servers and staff support!</p>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="isolate mx-auto max-w-7xl p-6 pb-4 lg:px-8 ">
+        <div class="border-t border-white/10 pt-4 text-center ">
+            <p class="text-xs text-zinc-400 ">© 2024 Retronodes Hosting Pvt. Ltd. All Rights Reserved.</p>
+        </div>
+    </footer>
+</body>
+
+</html>
