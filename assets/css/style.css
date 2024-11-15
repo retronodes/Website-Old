@@ -776,7 +776,23 @@
         /* Maintain constant glow effect on hover */
     }
 
-    .social-link-bottom {
-        padding-top: 10rem;
-        padding-bottom: 8.8rem;
-      }
+    :root {
+        --top-padding-pc: 8.8rem; /* Desktop padding */
+        --top-padding-mobile: 3rem; /* Mobile padding */
+        --bottom-padding-pc: 10rem; /* Desktop padding */
+        --bottom-padding-mobile: 4rem; /* Mobile padding */
+
+    }
+    
+    .social-link {
+        padding-top: var(--top-padding-mobile); /* Default to mobile */
+        padding-bottom: var(--bottom-padding-mobile); /* Default to mobile */
+    }
+    
+    @media (min-width: 640px) {
+        .social-link {
+            padding-top: var(--top-padding-pc); /* Apply desktop padding on wider screens */
+            padding-bottom: var(--bottom-padding-pc); /* Apply desktop padding on wider screens */
+
+        }
+    }    
