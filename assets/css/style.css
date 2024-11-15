@@ -775,3 +775,8 @@
         opacity: 1;
         /* Maintain constant glow effect on hover */
     }
+
+    .social-link-bottom {
+        padding-top: 10rem;
+        padding-bottom: 8.8rem;
+      }
